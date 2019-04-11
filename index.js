@@ -1,8 +1,8 @@
 
 module.exports = path => {
 	let regexp = RegExp('^' + path.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) => {
-		return optional? '(?:\/(?<' + param + '>.*))?': '\/(?<' + param + '>.*)'
-	}) + '(?:\/)?$', 'i')
+		return optional? '(?:/(?<' + param + '>[^/]*))?': '/(?<' + param + '>[^/]*)'
+	}) + '/?$', 'i')
 	return {
 		test: regexp.test,
 		exec: path => {
