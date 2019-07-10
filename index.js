@@ -4,7 +4,7 @@ module.exports = path => {
 		optional? '(?:/(?<' + param + '>[^/]*))?': '/(?<' + param + '>[^/]*)') + '/?$')
 	return {
 		regexp,
-		test: regexp.test,
+		test: regexp.test.bind(regexp),
 		exec: path => {
 			let match = regexp.exec(path)
 			if(!match) return null
