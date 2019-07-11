@@ -1,25 +1,43 @@
 
-module.exports = path => {
-	let regexp = new RegExp('^' + path.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) => 
+module.exports = route => {
+	let hasUnnamed = ~route.indexOf('(')
+
+	// Without regexp
+	if(!~route.indexOf(':') && !hasUnnamed)
+		return path => path == route? [] : null
+
+	let regexp = new RegExp('^' + route.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) => 
 		optional? '(?:/(?<' + param + '>[^/]*))?': '/(?<' + param + '>[^/]*)') + '/?$')
-	let result = path => {
+
+	// Unnamed parameters
+	if(hasUnnamed) return path => {
 		let match = regexp.exec(path)
+
 		if(!match) return null
 		if(match.length == 1) return []
+		if(match.groups) {
+			let res = []
 
-		match.shift()
-		let res = Array.from(match)
+			let keys = Object.keys(match.groups)
+			let vals = Object.values(match.groups)
 
-		if(!match.groups) return res
+			for(let i = 1; i < match.length; i++) {
+				let pos = vals.indexOf(match[i])
+				if(~pos) {
+					res[keys[pos]] = match[i]
+					delete vals[pos]
+				}
+				else res.push(match[i])
+			}
 
-		for(let i in match.groups) {
-			delete res[res.indexOf(match.groups[i])]
-			res[i] = match.groups[i]
+			return res
 		}
-
-		return res
+		return match.slice(1)
 	}
 
-	result.regexp = regexp
-	return result
+	return path => {
+		let match = regexp.exec(path)
+		if(!match) return null
+		return match.groups || {}
+	}
 }
