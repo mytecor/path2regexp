@@ -2,21 +2,24 @@
 module.exports = path => {
 	let regexp = new RegExp('^' + path.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) => 
 		optional? '(?:/(?<' + param + '>[^/]*))?': '/(?<' + param + '>[^/]*)') + '/?$')
-	return path => {
+	let result = path => {
 		let match = regexp.exec(path)
 		if(!match) return null
+		if(match.length == 1) return []
 
-		let res = []
+		match.shift()
+		let res = Array.from(match)
 
-		let keys = Object.keys(match.groups)
-		let vals = Object.values(match.groups)
+		if(!match.groups) return res
 
-		for(let i = 1; i < match.length; i++) {
-			let pos = vals.indexOf(match[i])
-			if(~pos) res[keys[pos]] = match[i]
-			else res.push(match[i])
+		for(let i in match.groups) {
+			delete res[res.indexOf(match.groups[i])]
+			res[i] = match.groups[i]
 		}
 
 		return res
 	}
+
+	result.regexp = regexp
+	return result
 }
