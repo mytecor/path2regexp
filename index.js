@@ -38,6 +38,6 @@ module.exports = route => {
 	return path => {
 		let match = regexp.exec(path)
 		if(!match) return null
-		return match.groups || {}
+		return Object.setPrototypeOf(Object.defineProperty(match.groups, 'length', {value: 0, writable: true}), Array.prototype) || []
 	}
 }
