@@ -12,4 +12,7 @@ console.log(route('/user/Midnighcoder/get/test')) // [ login: 'Midnighcoder', me
 let route2 = p2r('/user/(.*)/:action')
 console.log(route('/user/get/test')) // [ 'get', action: 'test' ]
 
+// Other rotes
+let route3 = p2r('/user/(get|post)/:action')
+console.log(route('/user/post/test')) // [ 'post', action: 'test' ]
 ```
