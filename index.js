@@ -1,16 +1,16 @@
 
 module.exports = route => {
-	let hasUnnamed = ~route.indexOf('(')
+	let hasRegexp = /[^\\][\[\*\(]/.test(route)
 
 	// Without regexp
-	if(!~route.indexOf(':') && !hasUnnamed)
+	if(!~route.indexOf(':') && !hasRegexp)
 		return path => path == route? [] : null
 
 	let regexp = new RegExp('^' + route.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) => 
 		optional? '(?:/(?<' + param + '>[^/]*))?': '/(?<' + param + '>[^/]*)') + '/?$')
 
 	// Unnamed parameters
-	if(hasUnnamed) return path => {
+	if(hasRegexp) return path => {
 		let match = regexp.exec(path)
 
 		if(!match) return null
