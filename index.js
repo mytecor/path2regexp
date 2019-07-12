@@ -1,19 +1,23 @@
 
 module.exports = route => {
-	let hasRegexp = /[^\\][\[\*\(]/.test(route)
-	let hasParams = ~route.indexOf(':')
+	let isRegexp, hasParams
 
-	// Without regexp
-	if(!hasParams && !hasRegexp)
-		return path => path == route? [] : null
+	if(typeof route == 'string') {
+		isRegexp = /[^\\][\[\*\(]/.test(route)
+		hasParams = ~route.indexOf(':')
 
-	let regexp = new RegExp('^' + route.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) => 
-		optional? '(?:/(?<' + param + '>[^/]*))?': '/(?<' + param + '>[^/]*)') + '/?$')
+		// Without regexp
+		if(!hasParams && !isRegexp)
+			return path => path == route? [] : null
+
+		route = new RegExp('^' + route.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) => 
+			optional? '(?:/(?<' + param + '>[^/]*))?': '/(?<' + param + '>[^/]*)') + '/?$')
+	} else isRegexp = true
 
 	// Unnamed parameters
-	if(hasRegexp)
+	if(isRegexp)
 		if(hasParams) return path => {
-			let match = regexp.exec(path)
+			let match = route.exec(path)
 
 			if(!match) return null
 			if(match.length == 1) return []
@@ -37,7 +41,7 @@ module.exports = route => {
 			return match.slice(1)
 		}
 		else return path => {
-			let match = regexp.exec(path)
+			let match = route.exec(path)
 
 			if(!match) return null
 			if(match.length == 1) return []
@@ -46,7 +50,7 @@ module.exports = route => {
 
 	// Named parameters
 	return path => {
-		let match = regexp.exec(path)
+		let match = route.exec(path)
 		if(!match) return null
 		return Object.setPrototypeOf(Object.defineProperty(match.groups, 'length', {value: 0, writable: true}), Array.prototype) || []
 	}
