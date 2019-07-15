@@ -6,7 +6,7 @@ module.exports = route => {
 		hasNamed = ~route.indexOf(':')
 		hasUnnamed = /[^\\][\[\*\(]/.test(route)
 
-		if(!hasNamed && !hasUnnamed) return path => path == route? {named: {}, unnamed: []} : null
+		if(!hasNamed && !hasUnnamed) return path => path == route? {} : null
 		
 		route = new RegExp('^' + route.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) => 
 			optional? '(?:/(?<' + param + '>[^/]*))?' : '/(?<' + param + '>[^/]*)') + '/?$')
