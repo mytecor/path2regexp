@@ -10,8 +10,10 @@
 	"author": "midnightcoder",
 	"license": "MIT",
 	"keywords": [
-		"express",
+		"midly",
 		"routing",
-		"path to regexp"
+		"path to regexp",
+		"path",
+		"regexp"
 	]
 }
