@@ -1,6 +1,6 @@
 {
 	"name": "path2regexp",
-	"version": "1.1.7",
+	"version": "1.1.8",
 	"description": "Micro version of express routing",
 	"main": "index.js",
 	"repository": {
