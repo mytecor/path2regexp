@@ -1,11 +1,11 @@
 {
 	"name": "path2regexp",
-	"version": "1.1.9",
+	"version": "1.2.0",
 	"description": "Micro version of express routing",
 	"main": "index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/midnightcoder-pro/path2regexp.git"
+		"url": "git+https://github.com/midnightcoder-pro/path2regexp"
 	},
 	"author": "midnightcoder",
 	"license": "MIT",
