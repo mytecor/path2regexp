@@ -5,9 +5,9 @@
 	"main": "index.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/midnightcoder-pro/path2regexp"
+		"url": "git+https://github.com/mytecor/path2regexp"
 	},
-	"author": "midnightcoder",
+	"author": "mytecor",
 	"license": "MIT",
 	"keywords": [
 		"midly",
