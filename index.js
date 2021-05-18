@@ -1,14 +1,14 @@
 
-module.exports = route => {
+module.exports = function p2r(route) {
 	let hasUnnamed = true, hasNamed
 
 	if(typeof route == 'string') {
-		hasNamed = ~route.indexOf(':')
+		hasNamed = route.includes(':')
 		hasUnnamed = /[^\\][\[\*\(]/.test(route)
 
 		if(!hasNamed && !hasUnnamed) return path => path == route? {} : null
-		
-		route = new RegExp('^' + route.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) => 
+
+		route = new RegExp('^' + route.replace(/\/:(.*?)(\??)(?=$|\/)/g, (match, param, optional) =>
 			optional? '(?:/(?<' + param + '>[^/]*))?' : '/(?<' + param + '>[^/]*)') + '/?$')
 	}
 
@@ -30,7 +30,7 @@ module.exports = route => {
 
 		return res
 	}
-	
+
 	return path => {
 		let match = route.exec(path)
 		if(!match) return null
